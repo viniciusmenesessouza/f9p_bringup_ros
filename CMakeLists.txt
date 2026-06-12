@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(zed_cpu)
+project(f9p_bringup)
 
 add_compile_options(-std=c++14)
 
