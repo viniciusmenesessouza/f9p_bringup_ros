@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>zed_cpu</name>
+  <version>1.0.0</version>
+  <description>Package for ZED cameras running on CPU</description>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>libhidapi-dev</depend>
+  <depend>libopencv-dev</depend>
+  <depend>libusb-1.0-dev</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>roscpp</depend>
+
+</package>

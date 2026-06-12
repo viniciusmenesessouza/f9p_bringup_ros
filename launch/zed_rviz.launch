@@ -1,0 +1,137 @@
+<launch>
+  <node pkg="zed_cpu" type="zed_node" name="zed_node" output="screen">
+    <!-- Pick one of: HD2K | HD1080 | HD720 | VGA -->
+    <param name="camera_resolution" value="HD720"/>
+    <!-- Will be clamped if invalid for the resolution -->
+    <param name="camera_fps" value="30"/>
+    <param name="camera_verbose" value="false"/>
+  </node>
+  
+  <!-- Resampler -->
+  <node pkg="zed_cpu" type="imu_resampler_node" name="imu_resampler" output="screen">
+    <param name="input_topic" value="/imu"/>
+    <param name="output_topic" value="/imu_data_interpolated"/>
+    <param name="frame_id" value="imu_frame"/>
+    <param name="imu_output_hz" value="300.0"/>
+    <param name="imu_warn_if_below" value="true"/>
+    <param name="imu_warn_margin" value="0.05"/>
+    <param name="imu_freq_ewma_alpha" value="0.1"/>
+    <param name="buffer_size" value="512"/>
+    <param name="watchdog_ms" value="200"/>
+    <param name="zoh_enable" value="true"/>
+    <param name="zoh_max_gap_ms" value="300"/>
+    <param name="warn_on_zoh" value="true"/>
+  </node>
+  
+  <!-- IMU marker visualizer -->
+  <node pkg="zed_cpu" type="imu_marker_node" name="imu_marker" output="screen">
+    <param name="imu_topic" value="/imu_data"/>            <!-- or /imu_data_interpolated -->
+    <param name="frame_id" value="imu_frame"/>
+    <param name="trail_len" value="80"/>
+    <param name="use_gyro" value="false"/>                 <!-- set true to visualize w -->
+    <param name="arrow_scale" value="0.06"/>               <!-- accel scaling -->
+    <param name="gyro_scale" value="0.03"/>                <!-- gyro scaling -->
+  </node>
+  
+  <node pkg="zed_cpu" type="imu_publisher" name="imu_publisher" output="screen"/> 
+  
+  <!-- M9N #0 -->
+  <group ns="m9n0">
+    <node pkg="ublox_gps" type="ublox_gps" name="ublox_m9n0" output="screen">
+      <param name="device"           value="/dev/ttyM9N0"/>
+      <param name="frame_id" value="m9n0_gps"/>
+      <param name="rate"             value="5"/>
+      <param name="baudrate"         value="115200"/>
+      <param name="uart1/baudrate"   value="230400"/>
+      <param name="publish/rtcm" value="true"/>    <!-- enable RTCM input -->
+      <param name="config_on_startup" value="false"/>
+      <param name="set_baudrate" value="false"/>
+      <param name="save_on_shutdown" value="false"/>
+      <param name="publish/nav/pvt" value="true"/>
+      <param name="publish/nav/status" value="true"/>
+      <param name="publish/nav/sat" value="true"/>
+      <param name="publish/nav/svinfo" value="false"/>  <!-- optional -->
+      <param name="publish/mon/hw" value="true"/>
+      <param name="publish/nav/clock" value="false"/>   <!-- optional -->
+    </node>
+  </group>
+
+
+  <!-- M9N #1 -->
+  <group ns="m9n1">
+    <node pkg="ublox_gps" type="ublox_gps" name="ublox_m9n1" output="screen">
+      <param name="device"           value="/dev/ttyM9N1"/>
+      <param name="frame_id" value="m9n1_gps"/>
+      <param name="rate"             value="5"/>
+      <param name="baudrate"         value="115200"/>   <!-- host -->
+      <param name="uart1/baudrate"   value="230400"/>   <!-- receiver -->
+      <param name="publish/rtcm" value="true"/>    <!-- enable RTCM input -->
+      <param name="config_on_startup" value="false"/>
+      <param name="set_baudrate" value="false"/>
+      <param name="save_on_shutdown" value="false"/>
+      <param name="publish/nav/pvt" value="true"/>
+      <param name="publish/nav/status" value="true"/>
+      <param name="publish/nav/sat" value="true"/>
+      <param name="publish/nav/svinfo" value="false"/>  <!-- optional -->
+      <param name="publish/mon/hw" value="true"/>
+      <param name="publish/nav/clock" value="false"/>   <!-- optional -->
+    </node>
+  </group>
+
+  <!-- F9P -->
+  <group ns="f9p">
+    <node pkg="ublox_gps" type="ublox_gps" name="ublox_f9p" output="screen">
+      <param name="device"           value="/dev/ttyF9P"/>
+      <param name="frame_id" value="f9p_gps"/>
+      <param name="rate"             value="5"/>
+      <param name="baudrate"         value="115200"/>
+      <param name="uart1/baudrate"   value="115200"/>
+      <param name="tmode3"           value="0"/>        <!-- DISABLED -->
+      <param name="publish/rxm/rtcm" value="true"/>    <!-- enable RTCM input -->
+      <param name="config_on_startup" value="false"/>
+      <param name="set_baudrate" value="false"/>
+      <param name="save_on_shutdown" value="false"/>
+      <param name="dgnss_mode" value="RTK FIXED"/>
+      <param name="publish/nav/pvt" value="true"/>
+      <param name="publish/nav/status" value="true"/>
+      <param name="publish/nav/sat" value="true"/>
+      <param name="publish/nav/svinfo" value="false"/>  <!-- optional -->
+      <param name="publish/mon/hw" value="true"/>
+      <param name="publish/nav/clock" value="false"/>   <!-- optional -->
+    </node>
+  </group>
+  
+  <node pkg="ntrip_client" type="ntrip_ros.py" name="ntrip_client" output="screen">
+    <param name="host" value="193.137.94.71"/>
+    <param name="port" value="2101"/>
+    <param name="mountpoint" value="IGP0"/>
+    <param name="user" value="renep6744"/>
+    <param name="password" value="Rh5rVbwt"/>
+    <param name="rtcm_topic" value="/rtcm"/>
+    <param name="rtcm_message_package" value="rtcm_msgs"/>
+  </node>
+
+  <!-- Rotates IMU frame so its +X points down (-Z in map) -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_imu"
+      args="0 0 0 0 0 0 map imu_frame"/>
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_frame"
+        args="0 0 0 0 0 0 map odom"/>
+        
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_m9n0_gps"
+      args="0 0 0 0 0 0 map m9n0_gps"/>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_m9n1_gps"
+      args="0 0 0 0 0 0 map m9n1_gps"/>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_f9p_gps"
+      args="0 0 0 0 0 0 map f9p_gps"/>
+
+  <node pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find zed_cpu)/rviz/imu_cam.rviz"
+        output="screen"/>
+        
+  <node pkg="rqt_plot" type="rqt_plot" name="imu_plot" args="/imu/linear_acceleration/x /imu/linear_acceleration/y /imu/linear_acceleration/z" output="screen"/>
+  
+  <node pkg="rqt_plot" type="rqt_plot" name="imu_interpol_plot" args="/imu_data_interpolated/linear_acceleration/x /imu_data_interpolated/linear_acceleration/y /imu_data_interpolated/linear_acceleration/z" output="screen"/>
+</launch>

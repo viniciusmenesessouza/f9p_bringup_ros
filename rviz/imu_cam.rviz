@@ -1,0 +1,208 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Imu1
+        - /Imu2
+        - /AerialMapDisplay1
+      Splitter Ratio: 0.5
+    Tree Height: 188
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+  - Class: rviz/Time
+    Name: Time
+    SyncMode: 0
+    SyncSource: Left Image
+Preferences:
+  PromptSaveOnExit: true
+Toolbars:
+  toolButtonStyle: 2
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.029999999329447746
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 20
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        f9p_gps:
+          Value: true
+        imu_frame:
+          Value: true
+        m9n0_gps:
+          Value: true
+        m9n1_gps:
+          Value: true
+        map:
+          Value: true
+        odom:
+          Value: true
+      Marker Alpha: 1
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        map:
+          f9p_gps:
+            {}
+          imu_frame:
+            {}
+          m9n0_gps:
+            {}
+          m9n1_gps:
+            {}
+          odom:
+            {}
+      Update Interval: 0
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /zed_node/rgb/left_image
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Left Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: /zed_node/rgb/right_image
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Right Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz_plugin_tutorials/Imu
+      Color: 204; 51; 204
+      Enabled: true
+      History Length: 1
+      Name: Imu
+      Queue Size: 10
+      Topic: /imu
+      Unreliable: false
+      Value: true
+    - Alpha: 1
+      Class: rviz_plugin_tutorials/Imu
+      Color: 32; 74; 135
+      Enabled: true
+      History Length: 1
+      Name: Imu
+      Queue Size: 10
+      Topic: /imu_data_interpolated
+      Unreliable: false
+      Value: true
+    - Alpha: 0.699999988079071
+      Blocks: 3
+      Class: rviz_plugins/AerialMapDisplay
+      Draw Behind: false
+      Enabled: true
+      Map Frame: map
+      Map transform type: NavSatFix Messages and Map Frame
+      Name: AerialMapDisplay
+      Object URI: https://tile.openstreetmap.org/{z}/{x}/{y}.png
+      Topic: /f9p/ublox_f9p/fix
+      UTM Frame: utm
+      UTM Zone: -1
+      Value: true
+      XY Reference: <NavSatFix Message>
+      Z Offset: 0
+      Z Reference: <NavSatFix Message>
+      Zoom: 19
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Default Light: true
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Theta std deviation: 0.2617993950843811
+      Topic: initialpose
+      X std deviation: 0.5
+      Y std deviation: 0.5
+    - Class: rviz/SetGoal
+      Topic: goal
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 90.55723571777344
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.05999999865889549
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Field of View: 0.7853981852531433
+      Focal Point:
+        X: 1.7575507164001465
+        Y: 7.256183624267578
+        Z: -2.988406181335449
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.05000000074505806
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.9247980117797852
+      Target Frame: <Fixed Frame>
+      Yaw: 0.4260064363479614
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 1016
+  Hide Left Dock: false
+  Hide Right Dock: false
+  Left Image:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000002000000000000050b000001e2fc0200000003fb000000100044006900730070006c00610079007301000001f9000000f9000000c900fffffffb0000000a0056006900650077007301000002f8000000a4000000a400fffffffb0000000800540069006d006501000003a2000000390000003900ffffff0000000200000738000001b6fc0100000002fb000000160052006900670068007400200049006d00610067006501000000000000039e0000009e00fffffffb00000014004c00650066007400200049006d00610067006501000003a4000003940000009600ffffff00000227000001e200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Right Image:
+    collapsed: false
+  Time:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1848
+  X: 72
+  Y: 27

@@ -1,0 +1,55 @@
+<launch>
+  <arg name="bag_dir" default="$(env HOME)/bags"/>
+  <arg name="tag" default="VIENA"/>
+
+  <!-- record options -->
+  <arg name="use_lz4" default="true"/>
+  <arg name="tcpnodelay" default="true"/>
+  <arg name="buffsize_mb" default="0"/>
+  <arg name="record_tf" default="false"/>
+
+  <node pkg="zed_cpu" type="record_rosbag.py" name="record_rosbag" output="screen" required="true">
+    <param name="bag_dir" value="$(arg bag_dir)"/>
+    <param name="tag" value="$(arg tag)"/>
+    <param name="use_lz4" value="$(arg use_lz4)"/>
+    <param name="tcpnodelay" value="$(arg tcpnodelay)"/>
+    <param name="buffsize_mb" value="$(arg buffsize_mb)"/>
+    <param name="record_tf" value="$(arg record_tf)"/>
+
+    <!-- Topics to record -->
+    <rosparam param="topics">
+      - /f9p/ublox_f9p/fix
+      - /f9p/ublox_f9p/fix_velocity
+      - /f9p/ublox_f9p/monhw
+      - /f9p/ublox_f9p/navpvt
+      - /f9p/ublox_f9p/navsat
+      - /f9p/ublox_f9p/navstatus
+      - /f9p/ublox_f9p/rxmrtcm
+
+      - /m9n0/ublox_m9n0/fix
+      - /m9n0/ublox_m9n0/fix_velocity
+      - /m9n0/ublox_m9n0/monhw
+      - /m9n0/ublox_m9n0/navpvt
+      - /m9n0/ublox_m9n0/navsat
+      - /m9n0/ublox_m9n0/navstatus
+
+      - /m9n1/ublox_m9n1/fix
+      - /m9n1/ublox_m9n1/fix_velocity
+      - /m9n1/ublox_m9n1/monhw
+      - /m9n1/ublox_m9n1/navpvt
+      - /m9n1/ublox_m9n1/navsat
+      - /m9n1/ublox_m9n1/navstatus
+
+      - /imu
+      - /imu_data_interpolated
+      
+      <!-- compressed images only -->
+      - /zed_node/rgb/left_image/compressed
+      - /zed_node/rgb/right_image/compressed
+
+      - /rosout
+      - /rosout_agg
+    </rosparam>
+  </node>
+</launch>
+

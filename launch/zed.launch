@@ -1,0 +1,27 @@
+<launch>
+  <node pkg="zed_cpu" type="zed_node" name="zed_node" output="screen">
+    <!-- Pick one of: HD2K | HD1080 | HD720 | VGA -->
+    <param name="camera_resolution" value="HD720"/>
+    <!-- Will be clamped if invalid for the resolution -->
+    <param name="camera_fps" value="30"/>
+    <param name="camera_verbose" value="false"/>
+  </node>
+  
+  <!-- Resampler -->
+  <node pkg="zed_cpu" type="imu_resampler_node" name="imu_resampler" output="screen">
+    <param name="input_topic" value="/imu"/>
+    <param name="output_topic" value="/imu_data_interpolated"/>
+    <param name="frame_id" value="imu_frame"/>
+    <param name="imu_output_hz" value="300.0"/>
+    <param name="imu_warn_if_below" value="true"/>
+    <param name="imu_warn_margin" value="0.05"/>
+    <param name="imu_freq_ewma_alpha" value="0.1"/>
+    <param name="buffer_size" value="512"/>
+    <param name="watchdog_ms" value="200"/>
+    <param name="zoh_enable" value="true"/>
+    <param name="zoh_max_gap_ms" value="300"/>
+    <param name="warn_on_zoh" value="true"/>
+  </node>
+  
+  <node pkg="zed_cpu" type="imu_publisher" name="imu_publisher" output="screen"/> 
+</launch>
