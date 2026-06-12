@@ -1,78 +1,164 @@
-<h1 align="center">
-  ZED Camera ROS wrapper on CPU
-</h1>
+# f9p_bringup_ros
 
+ROS bringup package for a ZED camera, ZED IMU, two u-blox M9N receivers, one u-blox F9P receiver, NTRIP RTCM input, RViz visualization, and rosbag recording.
 
-## Description
-ROS wrapper for Stereolabs cameras (ZED 2, ZED 2i, and ZED Mini) dedicatet for CPU. Based on Stereolabs [zed-open-capture](https://github.com/stereolabs/zed-open-capture) repository. Repository delivers only video capture and IMU data. For more advanced data, please refer to the original repository from Stereolabs [zed-ros-wrapper](https://github.com/stereolabs/zed-ros-wrapper)
+The ROS package name is currently `zed_cpu`.
+
+## Features
+
+- Publishes ZED left and right camera images.
+- Publishes raw ZED IMU data on `/imu`.
+- Resamples IMU data to `/imu_data_interpolated`.
+- Starts three u-blox receivers:
+  - `/m9n0/ublox_m9n0` on `/dev/ttyM9N0`
+  - `/m9n1/ublox_m9n1` on `/dev/ttyM9N1`
+  - `/f9p/ublox_f9p` on `/dev/ttyF9P`
+- Starts an NTRIP client that publishes RTCM corrections on `/rtcm`.
+- Provides RViz and rqt_plot launch support.
+- Provides a rosbag recorder for GPS, IMU, and compressed ZED image topics.
+
+## Requirements
+
+- Linux with ROS Noetic
+- Catkin workspace
+- ZED 2, ZED 2i, or ZED Mini
+- u-blox M9N and F9P receivers
+- OpenCV
+- HIDAPI
+- LIBUSB
+- ROS packages:
+  - `cv_bridge`
+  - `image_transport`
+  - `roscpp`
+  - `sensor_msgs`
+  - `std_msgs`
+  - `visualization_msgs`
+  - `ublox_gps`
+  - `ntrip_client`
+  - `rtcm_msgs`
+  - `rviz`
+  - `rqt_plot`
 
 ## Build
 
-### Prerequisites
-
- * Stereo camera: [ZED 2i](https://www.stereolabs.com/zed-2i/), [ZED 2](https://www.stereolabs.com/zed-2/), [ZED Mini](https://www.stereolabs.com/zed-mini/)
- * Linux OS
- * ROS Noetic
- * GCC (v7.5+)
- * OpenCV (v3.4.0+)
-
-### Clone the repository
+Clone this repository into a catkin workspace:
 
 ```bash
-mkdir -p ros_ws/src
-cd ros_ws
-git clone https://github.com/husarion/zed-cpu.git src/zed-cpu
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+git clone https://github.com/viniciusmenesessouza/f9p_bringup_ros.git
 ```
 
-### Install prerequisites
-
-* Install HIDAPI and LIBUSB libraries:
+Install system dependencies:
 
 ```bash
-sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev
+sudo apt update
+sudo apt install libusb-1.0-0-dev libhidapi-libusb0 libhidapi-dev libopencv-dev libopencv-viz-dev
 ```
 
-* Install OpenCV:
+Install ROS dependencies:
 
 ```bash
-sudo apt install libopencv-dev libopencv-viz-dev
-```
-
-* Install ROS dependencies:
-
-```bash
+cd ~/catkin_ws
 rosdep install --from-paths src --ignore-src -r -y
 ```
 
-
-### Add udev rule
-Stereo cameras such as ZED 2 and ZED Mini have built-in sensors (e.g. IMU) that are identified as USB HID devices.
-To be able to access the USB HID device, you must add a udev rule contained in the `udev` folder:
+Build the workspace:
 
 ```bash
-cd src/zed-cpu/udev
+catkin_make
+source devel/setup.bash
+```
+
+## ZED udev Rule
+
+The ZED camera exposes its sensors as USB HID devices. Install the included udev rule before running the camera nodes:
+
+```bash
+cd ~/catkin_ws/src/f9p_bringup_ros/udev
 bash install_udev_rule.sh
 ```
 
-### Build code
+Reconnect the camera after installing the rule.
 
-```bash
-cd ~/ros_ws
-catkin_make
+## Device Names
+
+The launch files expect these serial device paths:
+
+```text
+/dev/ttyM9N0
+/dev/ttyM9N1
+/dev/ttyF9P
 ```
-### Run code
+
+Create stable udev rules or symlinks for the receivers before launching the full stack.
+
+## Launch
+
+Start the ZED camera and IMU pipeline:
 
 ```bash
-source ~/ros_ws/devel/setup.bash
 roslaunch zed_cpu zed.launch
 ```
 
-## Coordinates system
+Start the ZED, IMU, GPS receivers, and NTRIP client:
 
-The given IMU and Magnetometer data are expressed in the RAW coordinate system as show below
+```bash
+roslaunch zed_cpu zed_gps.launch
+```
 
-<div align="center">
+Start the full visualization setup with RViz, TF publishers, IMU marker, and rqt plots:
 
-![](./images/imu_axis.jpg)
+```bash
+roslaunch zed_cpu zed_rviz.launch
+```
 
-</div># f9p_bringup_ros
+Before using the NTRIP launch files, review the server, mountpoint, username, and password parameters in the launch file.
+
+## Recording
+
+Record the configured GPS, IMU, and compressed ZED image topics:
+
+```bash
+roslaunch zed_cpu zed_record.launch
+```
+
+By default, bags are written to `~/bags` with filenames like:
+
+```text
+HHMMSS_DDMMYY_VIENA.bag
+```
+
+Override the output directory or tag:
+
+```bash
+roslaunch zed_cpu zed_record.launch bag_dir:=/path/to/bags tag:=FIELD_RUN
+```
+
+The recorder can also include TF topics:
+
+```bash
+roslaunch zed_cpu zed_record.launch record_tf:=true
+```
+
+## Main Topics
+
+- `/imu`
+- `/imu_data_interpolated`
+- `/zed_node/rgb/left_image/compressed`
+- `/zed_node/rgb/right_image/compressed`
+- `/f9p/ublox_f9p/fix`
+- `/f9p/ublox_f9p/fix_velocity`
+- `/f9p/ublox_f9p/navpvt`
+- `/f9p/ublox_f9p/navsat`
+- `/f9p/ublox_f9p/navstatus`
+- `/f9p/ublox_f9p/rxmrtcm`
+- `/m9n0/ublox_m9n0/fix`
+- `/m9n1/ublox_m9n1/fix`
+
+## Notes
+
+- Camera resolution and FPS are configured in the launch files with `camera_resolution` and `camera_fps`.
+- The IMU resampler publishes at `300.0 Hz` by default.
+- The GPS receivers are configured at `5 Hz` by default.
+- The F9P launch configuration sets `dgnss_mode` to `RTK FIXED`.
