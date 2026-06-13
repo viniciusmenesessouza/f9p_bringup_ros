@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="zed_cpu" type="zed_node" name="zed_node" output="screen">
+  <node pkg="f9p_bringup" type="zed_node" name="zed_node" output="screen">
     <!-- Pick one of: HD2K | HD1080 | HD720 | VGA -->
     <param name="camera_resolution" value="HD720"/>
     <!-- Will be clamped if invalid for the resolution -->
@@ -8,7 +8,7 @@
   </node>
   
   <!-- Resampler -->
-  <node pkg="zed_cpu" type="imu_resampler_node" name="imu_resampler" output="screen">
+  <node pkg="f9p_bringup" type="imu_resampler_node" name="imu_resampler" output="screen">
     <param name="input_topic" value="/imu"/>
     <param name="output_topic" value="/imu_data_interpolated"/>
     <param name="frame_id" value="imu_frame"/>
@@ -23,7 +23,7 @@
     <param name="warn_on_zoh" value="true"/>
   </node>
   
-  <node pkg="zed_cpu" type="imu_publisher" name="imu_publisher" output="screen"/> 
+  <node pkg="f9p_bringup" type="imu_publisher" name="imu_publisher" output="screen"/> 
   
   <!-- M9N #0 -->
   <group ns="m9n0">
@@ -89,11 +89,11 @@
   </group>
   
   <node pkg="ntrip_client" type="ntrip_ros.py" name="ntrip_client" output="screen">
-    <param name="host" value="193.137.94.71"/>
-    <param name="port" value="2101"/>
-    <param name="mountpoint" value="IGP0"/>
-    <param name="user" value="renep6744"/>
-    <param name="password" value="Rh5rVbwt"/>
+    <param name="host" value="YOUR_HOST_ADDRESS"/> <!-- e.g., "ntrip.example.com" -->
+    <param name="port" value="YOUR_HOST_PORT"/> <!-- e.g., 2101 -->
+    <param name="mountpoint" value="YOUR_HOST_MOUNTPOINT"/> <!-- e.g., "RTCM3" -->
+    <param name="user" value="YOUR_USER"/> <!-- e.g., "myusername" -->
+    <param name="password" value="YOUR_PASSWORD"/> <!-- e.g., "mypassword" -->
     <param name="rtcm_topic" value="/rtcm"/>
     <param name="rtcm_message_package" value="rtcm_msgs"/>
   </node>

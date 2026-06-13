@@ -3,6 +3,8 @@
   <name>f9p_bringup</name>
   <version>1.0.0</version>
   <description>Package for F9P-RTK and ZED2i cameras running on CPU</description>
+  <maintainer email="vinicius.m.souza@tecnico.ulisboa.pt">viniciusmenesessouza</maintainer>
+  <license>TODO: License declaration</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 

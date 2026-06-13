@@ -93,6 +93,17 @@ The launch files expect these serial device paths:
 
 Create stable udev rules or symlinks for the receivers before launching the full stack.
 
+## NTRIP configuration
+
+For each .launch edit the NTRIP configurations to the ones of your given host:
+```text
+<param name="host" value="YOUR_HOST_ADDRESS"/> <!-- e.g., "ntrip.example.com" -->
+<param name="port" value="YOUR_HOST_PORT"/> <!-- e.g., 2101 -->
+<param name="mountpoint" value="YOUR_HOST_MOUNTPOINT"/> <!-- e.g., "RTCM3" -->
+<param name="user" value="YOUR_USER"/> <!-- e.g., "myusername" -->
+<param name="password" value="YOUR_PASSWORD"/> <!-- e.g., "mypassword" -->
+```
+
 ## Launch
 
 Start the ZED camera and IMU pipeline:

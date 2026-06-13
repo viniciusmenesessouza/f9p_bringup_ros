@@ -8,7 +8,7 @@
   <arg name="buffsize_mb" default="0"/>
   <arg name="record_tf" default="false"/>
 
-  <node pkg="zed_cpu" type="record_rosbag.py" name="record_rosbag" output="screen" required="true">
+  <node pkg="f9p_bringup" type="record_rosbag.py" name="record_rosbag" output="screen" required="true">
     <param name="bag_dir" value="$(arg bag_dir)"/>
     <param name="tag" value="$(arg tag)"/>
     <param name="use_lz4" value="$(arg use_lz4)"/>

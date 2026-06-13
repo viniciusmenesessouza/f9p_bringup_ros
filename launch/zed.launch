@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="zed_cpu" type="zed_node" name="zed_node" output="screen">
+  <node pkg="f9p_bringup" type="zed_node" name="zed_node" output="screen">
     <!-- Pick one of: HD2K | HD1080 | HD720 | VGA -->
     <param name="camera_resolution" value="HD720"/>
     <!-- Will be clamped if invalid for the resolution -->
@@ -8,7 +8,7 @@
   </node>
   
   <!-- Resampler -->
-  <node pkg="zed_cpu" type="imu_resampler_node" name="imu_resampler" output="screen">
+  <node pkg="f9p_bringup" type="imu_resampler_node" name="imu_resampler" output="screen">
     <param name="input_topic" value="/imu"/>
     <param name="output_topic" value="/imu_data_interpolated"/>
     <param name="frame_id" value="imu_frame"/>
@@ -23,5 +23,5 @@
     <param name="warn_on_zoh" value="true"/>
   </node>
   
-  <node pkg="zed_cpu" type="imu_publisher" name="imu_publisher" output="screen"/> 
+  <node pkg="f9p_bringup" type="imu_publisher" name="imu_publisher" output="screen"/> 
 </launch>
