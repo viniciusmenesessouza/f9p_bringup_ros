@@ -2,8 +2,6 @@
 
 ROS bringup package for a ZED camera, ZED IMU, two u-blox M9N receivers, one u-blox F9P receiver, NTRIP RTCM input, RViz visualization, and rosbag recording.
 
-The ROS package name is currently `zed_cpu`.
-
 ## Features
 
 - Publishes ZED left and right camera images.
@@ -109,19 +107,19 @@ For each .launch edit the NTRIP configurations to the ones of your given host:
 Start the ZED camera and IMU pipeline:
 
 ```bash
-roslaunch zed_cpu zed.launch
+roslaunch f9p_bringup zed.launch
 ```
 
 Start the ZED, IMU, GPS receivers, and NTRIP client:
 
 ```bash
-roslaunch zed_cpu zed_gps.launch
+roslaunch f9p_bringup zed_gps.launch
 ```
 
 Start the full visualization setup with RViz, TF publishers, IMU marker, and rqt plots:
 
 ```bash
-roslaunch zed_cpu zed_rviz.launch
+roslaunch f9p_bringup zed_rviz.launch
 ```
 
 Before using the NTRIP launch files, review the server, mountpoint, username, and password parameters in the launch file.
@@ -131,7 +129,7 @@ Before using the NTRIP launch files, review the server, mountpoint, username, an
 Record the configured GPS, IMU, and compressed ZED image topics:
 
 ```bash
-roslaunch zed_cpu zed_record.launch
+roslaunch f9p_bringup zed_record.launch
 ```
 
 By default, bags are written to `~/bags` with filenames like:
@@ -143,13 +141,13 @@ HHMMSS_DDMMYY_VIENA.bag
 Override the output directory or tag:
 
 ```bash
-roslaunch zed_cpu zed_record.launch bag_dir:=/path/to/bags tag:=FIELD_RUN
+roslaunch f9p_bringup zed_record.launch bag_dir:=/path/to/bags tag:=FIELD_RUN
 ```
 
 The recorder can also include TF topics:
 
 ```bash
-roslaunch zed_cpu zed_record.launch record_tf:=true
+roslaunch f9p_bringup zed_record.launch record_tf:=true
 ```
 
 ## Main Topics
